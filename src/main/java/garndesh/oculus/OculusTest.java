@@ -51,7 +51,7 @@ public abstract class OculusTest extends LwjglApp {
 	private final FrameBuffer frameBuffers[] = new FrameBuffer[2];
 	private final Matrix4f projections[] = new Matrix4f[2];
 	private int frameCount = -1;
-	private Matrix4f worldToCamera = new Matrix4f();
+	private Matrix4f worldToCamera;
 	private final float eyeHeight;
 	private final float ipd;
 	private String TAG = "Oculus Test";
@@ -100,9 +100,12 @@ public abstract class OculusTest extends LwjglApp {
 		}
 
 		ipd = hmd.getFloat(OvrLibrary.OVR_KEY_IPD, OVR_DEFAULT_IPD);
-	    eyeHeight = hmd.getFloat(OvrLibrary.OVR_KEY_EYE_HEIGHT, OVR_DEFAULT_EYE_HEIGHT);
-	    recenterView();
-	    
+		eyeHeight = hmd.getFloat(OvrLibrary.OVR_KEY_EYE_HEIGHT,
+				OVR_DEFAULT_EYE_HEIGHT);
+		Log.d(TAG, "ipd: "+ ipd);
+		Log.d(TAG, "eyeHeight: "+eyeHeight);
+		recenterView();
+
 	}
 
 	@Override
@@ -225,11 +228,10 @@ public abstract class OculusTest extends LwjglApp {
 			Posef pose = eyePoses[eye];
 			MatrixStack.PROJECTION.set(projections[eye]);
 			// This doesn't work as it breaks the contiguous nature of the array
-			// FIXME there has to be a better way to do this
 			poses[eye].Orientation = pose.Orientation;
 			poses[eye].Position = pose.Position;
 
-			//Log.d(TAG, "setting matrixstack for eye "+eye);
+			// Log.d(TAG, "setting matrixstack for eye "+eye);
 			MatrixStack mv = MatrixStack.MODELVIEW;
 			mv.push();
 			{
@@ -248,8 +250,8 @@ public abstract class OculusTest extends LwjglApp {
 
 	@Override
 	protected void finishFrame() {
-		Display.update();
-		//Display.processMessages();
+		//Display.update();
+		Display.processMessages();
 	}
 
 	private void recenterView() {
@@ -261,19 +263,24 @@ public abstract class OculusTest extends LwjglApp {
 
 	@Override
 	public void update() {
-	    while (Keyboard.next()) {
-	    	//Log.d(TAG, "KeyboardEvent " + Keyboard.getEventCharacter());
-	        onKeyboardEvent();
-	      }
+		while (Keyboard.next()) {
+			Log.d(TAG,
+					"KeyboardEvent " + Keyboard.getEventCharacter() + " "
+							+ Keyboard.getEventKey() + " "
+							+ Keyboard.getKeyName(Keyboard.getEventKey()));
+			onKeyboardEvent();
+		}
 
-	      while (Mouse.next()) {
-	        //onMouseEvent();
-	      }
+		while (Mouse.next()) {
+			// onMouseEvent();
+		}
 		MatrixStack.MODELVIEW.set(worldToCamera);
 	}
 
 	protected void onKeyboardEvent() {
+		Log.d(TAG,  "DisplayState: "+hmd.getHSWDisplayState().Displayed);
 		if (0 != hmd.getHSWDisplayState().Displayed) {
+			Log.d(TAG,  "Dismissing the HSW");
 			hmd.dismissHSWDisplay();
 			return;
 		}
@@ -290,9 +297,11 @@ public abstract class OculusTest extends LwjglApp {
 			} else {
 				hmd.setEnabledCaps(caps | ovrHmdCap_LowPersistence);
 			}
+			break;
 		case Keyboard.KEY_ESCAPE:
-		      System.exit(0);
-		      break;
+			Log.d(TAG, "Keyboard Escape!! stopping");
+			System.exit(0);
+			break;
 		default:
 		}
 	}
