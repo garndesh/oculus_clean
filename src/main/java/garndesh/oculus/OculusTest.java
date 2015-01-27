@@ -235,7 +235,7 @@ public abstract class OculusTest extends LwjglApp {
 			MatrixStack mv = MatrixStack.MODELVIEW;
 			mv.push();
 			{
-				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position));
+				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position).mult(-1));
 				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation)
 						.inverse());
 				frameBuffers[eye].activate();

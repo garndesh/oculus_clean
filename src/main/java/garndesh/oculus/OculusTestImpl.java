@@ -28,7 +28,7 @@ public class OculusTestImpl extends OculusTest {
 		MatrixStack mv = MatrixStack.MODELVIEW;
 		mv.push();
 		{
-			mv.translate(new Vector3f(0, 2, 0)).scale(0.1F);
+			mv.translate(new Vector3f(0, 1, 0));
 			for (int x = -1; x < 3; x++) {
 				mv.push();
 				mv.translate(new Vector3f( x%2*5, 0, (x-1)%2*5));
