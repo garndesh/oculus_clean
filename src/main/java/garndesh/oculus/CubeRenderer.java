@@ -4,9 +4,6 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_SHORT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
@@ -20,17 +17,12 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL31.GL_PRIMITIVE_RESTART;
-import static org.lwjgl.opengl.GL31.glPrimitiveRestartIndex;
 
-import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.saintandreas.gl.OpenGL;
-import org.saintandreas.gl.shaders.Program;
-import org.saintandreas.gl.textures.Texture;
+import org.saintandreas.gl.MatrixStack;
 
 public class CubeRenderer {
 
@@ -39,12 +31,22 @@ public class CubeRenderer {
 	private int vboTexID;
 	private int eboID;
 	private Texture texture;
-	private Program program;
+	//private Program program;
+	private ShaderProgram shader;
 
 	public CubeRenderer() {
 		
-		program = new Program(Resources.SHADERS_TEST_SHADER_VERTEX, Resources.SHADERS_TEST_SHADER_FRAGMENT);
-		program.link();
+		/*program = new Program(Resources.SHADERS_TEST_SHADER_VERTEX, Resources.SHADERS_TEST_SHADER_FRAGMENT);
+		program.link();*/
+
+		shader = new ShaderProgram();
+		shader.attachVertexShader(Resources.SHADERS_TEST_SHADER_VERTEX);
+		shader.attachFragmentShader(Resources.SHADERS_TEST_SHADER_FRAGMENT);
+		shader.link();
+
+		// Set the texture sampler
+		shader.setUniform("TexCoord", new float[] { 2 });
+		
 		// Vertices for our cube
 		FloatBuffer vertices = BufferUtils.createFloatBuffer(24);
 		vertices.put(new float[] { 
@@ -132,24 +134,38 @@ public class CubeRenderer {
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements, GL_STATIC_DRAW);
 		
 
-		try {
+		texture = Texture.loadTexture(Resources.TEXTURES_TEST_TEXTURE.path);
+		texture.setActiveTextureUnit(0); 
+		texture.bind();
+		/*try {
 			texture = Texture.loadImage(Resources.TEXTURES_TEST_TEXTURE);
 			glActiveTexture(GL_TEXTURE0 + 0);
 			texture.bind();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	public void RenderCube() {
 
-	    glPrimitiveRestartIndex(Short.MAX_VALUE);
-	    glEnable(GL_PRIMITIVE_RESTART);
-
+	    //glPrimitiveRestartIndex(Short.MAX_VALUE);
+	    //glEnable(GL_PRIMITIVE_RESTART);
+/*
 	    program.use();
 	    OpenGL.bindAll(program);
+		glBindVertexArray(vaoID);*/
+	    //GL20.glUseProgram(program.program);
+	  //  program.use();
+		//program.setUniform("Projection", MatrixStack.PROJECTION.top());
+	   // program.setUniform("ModelView", MatrixStack.MODELVIEW.top());
+		
+		shader.bind();
+		shader.setUniform("m_proj", MatrixStack.PROJECTION.top());
+		shader.setUniform("m_view", MatrixStack.MODELVIEW.top());
+		
+
 		glBindVertexArray(vaoID);
+		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		// Draw a cube
@@ -159,10 +175,9 @@ public class CubeRenderer {
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		
-
-		Program.clear();
 		glBindVertexArray(0);
 		// Unbind the shaders
+		ShaderProgram.unbind();
 	}
 	
 	public void dispose(){

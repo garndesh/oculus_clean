@@ -1,13 +1,14 @@
-#version 330
-uniform mat4 Projection = mat4(1);
-uniform mat4 ModelView = mat4(1);
+#version 330 core
 
-layout(location = 0) in vec3 Position;
+uniform mat4 m_proj;
+uniform mat4 m_view;
+
+layout(location = 0) in vec3 pos;
 layout(location = 1) in vec2 tex;
 
-out vec2 texCoords;
+out vec2 textureCoords;
 
 void main() {
-	gl_Position = Projection * mat4(mat3(ModelView)) * vec4(Position, 1.0);
-	texCoords = tex;
+	textureCoords = tex;
+	gl_Position = m_proj * m_view * vec4(pos, 1.0);
 }

@@ -215,7 +215,7 @@ public abstract class OculusTest extends LwjglApp {
 						Pointer.createConstant(nativeWindow), null, null);
 			}
 		}
-		hmd.enableHswDisplay(false);
+		//hmd.enableHswDisplay(true);
 	}
 
 	@Override
@@ -226,7 +226,7 @@ public abstract class OculusTest extends LwjglApp {
 		for (int i = 0; i < 2; ++i) {
 			int eye = hmd.EyeRenderOrder[i];
 			Posef pose = eyePoses[eye];
-			MatrixStack.PROJECTION.set(projections[eye]);
+			MatrixStack.PROJECTION.set(projections[eye]);//.push();
 			// This doesn't work as it breaks the contiguous nature of the array
 			poses[eye].Orientation = pose.Orientation;
 			poses[eye].Position = pose.Position;
@@ -235,8 +235,7 @@ public abstract class OculusTest extends LwjglApp {
 			MatrixStack mv = MatrixStack.MODELVIEW;
 			mv.push();
 			{
-				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position).mult(
-						-1));
+				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position));
 				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation)
 						.inverse());
 				frameBuffers[eye].activate();
@@ -244,6 +243,7 @@ public abstract class OculusTest extends LwjglApp {
 				frameBuffers[eye].deactivate();
 			}
 			mv.pop();
+			//MatrixStack.PROJECTION.pop();
 		}
 		hmd.endFrame(poses, eyeTextures);
 	}
