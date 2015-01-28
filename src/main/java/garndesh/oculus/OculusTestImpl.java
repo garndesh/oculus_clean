@@ -7,6 +7,7 @@ import static org.lwjgl.opengl.GL11.glClear;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.saintandreas.gl.MatrixStack;
+import org.saintandreas.math.Matrix4f;
 import org.saintandreas.math.Vector3f;
 
 public class OculusTestImpl extends OculusTest {
@@ -14,13 +15,14 @@ public class OculusTestImpl extends OculusTest {
 	private static OculusTestImpl instance;
 	private CubeRenderer cube;
 
-	public OculusTestImpl(){
+	public OculusTestImpl() {
 		super();
 		instance = this;
 	}
+
 	@Override
 	protected void renderScene() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
 		if (cube == null)
 			cube = new CubeRenderer();
@@ -28,22 +30,33 @@ public class OculusTestImpl extends OculusTest {
 		MatrixStack mv = MatrixStack.MODELVIEW;
 		mv.push();
 		{
-			mv.translate(new Vector3f(0, 1, 0));
-			for (int x = -1; x < 3; x++) {
-				mv.push();
-				mv.translate(new Vector3f( x%2*5, 0, (x-1)%2*5));
+			mv.push();
+			{
+				mv.set(new Matrix4f());
+				mv.translate(new Vector3f(0, -0.5F, 0));
+				mv.scale(new Vector3f(200, 1, 200));
 				cube.RenderCube();
-				mv.pop();
 			}
+			mv.pop();
+			
+			mv.push();
+			{
+				mv.translate(new Vector3f(5, 1, 0));
+				cube.RenderCube();
+			/*
+			 * for (int x = -1; x < 3; x++) { mv.push(); mv.translate(new
+			 * Vector3f( x%2*5, 0, (x-1)%2*5)); cube.RenderCube(); mv.pop(); }
+			 */
+			}
+			mv.pop();
 		}
 		mv.pop();
 		//
 	}
-	
-	
+
 	public static void end() {
 		Mouse.setGrabbed(false);
-		//instance.dispose();
+		// instance.dispose();
 		Display.destroy();
 		System.exit(0);
 	}

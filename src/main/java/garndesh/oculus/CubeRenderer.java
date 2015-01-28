@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_SHORT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
@@ -17,6 +18,8 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL31.GL_PRIMITIVE_RESTART;
+import static org.lwjgl.opengl.GL31.glPrimitiveRestartIndex;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
@@ -148,8 +151,8 @@ public class CubeRenderer {
 
 	public void RenderCube() {
 
-	    //glPrimitiveRestartIndex(Short.MAX_VALUE);
-	    //glEnable(GL_PRIMITIVE_RESTART);
+	    glPrimitiveRestartIndex(Short.MAX_VALUE);
+	    glEnable(GL_PRIMITIVE_RESTART);
 /*
 	    program.use();
 	    OpenGL.bindAll(program);
@@ -158,22 +161,28 @@ public class CubeRenderer {
 	  //  program.use();
 		//program.setUniform("Projection", MatrixStack.PROJECTION.top());
 	   // program.setUniform("ModelView", MatrixStack.MODELVIEW.top());
-		
+		//glPrimitiveRestartIndex(Short.MAX_VALUE);
+	   // glEnable(GL_PRIMITIVE_RESTART);
+	    
 		shader.bind();
 		shader.setUniform("m_proj", MatrixStack.PROJECTION.top());
 		shader.setUniform("m_view", MatrixStack.MODELVIEW.top());
 		
 
 		glBindVertexArray(vaoID);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
 		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 1);
+		
 		// Draw a cube
 		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
 		// Unbind the VAO
-		
-		glDisableVertexAttribArray(0);
+
 		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(0);
 		
 		glBindVertexArray(0);
 		// Unbind the shaders

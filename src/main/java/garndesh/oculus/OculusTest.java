@@ -10,6 +10,9 @@ import static com.oculusvr.capi.OvrLibrary.ovrHmdType.ovrHmd_DK1;
 import static com.oculusvr.capi.OvrLibrary.ovrRenderAPIType.ovrRenderAPI_OpenGL;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Orientation;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Position;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 
 import java.awt.Rectangle;
 import java.lang.reflect.Field;
@@ -96,6 +99,7 @@ public abstract class OculusTest extends LwjglApp {
 			header.TextureSize = hmd
 					.getFovTextureSize(eye, fovPorts[eye], 1.0f);
 			header.RenderViewport.Size = header.TextureSize;
+			
 			header.RenderViewport.Pos = new OvrVector2i(0, 0);
 		}
 
@@ -193,7 +197,7 @@ public abstract class OculusTest extends LwjglApp {
 		rc.Header.Multisample = 1;
 
 		int distortionCaps = ovrDistortionCap_Chromatic
-				| ovrDistortionCap_TimeWarp | ovrDistortionCap_Vignette;
+				| ovrDistortionCap_TimeWarp /*| ovrDistortionCap_Vignette*/;
 
 		for (int i = 0; i < rc.PlatformData.length; ++i) {
 			rc.PlatformData[i] = Pointer.createConstant(0);
@@ -236,8 +240,7 @@ public abstract class OculusTest extends LwjglApp {
 			mv.push();
 			{
 				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position).mult(-1));
-				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation)
-						.inverse());
+				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation).inverse());
 				frameBuffers[eye].activate();
 				renderScene();
 				frameBuffers[eye].deactivate();
@@ -252,11 +255,12 @@ public abstract class OculusTest extends LwjglApp {
 	protected void finishFrame() {
 		//Display.update();
 		Display.processMessages();
+	    MatrixStack.MODELVIEW.set(worldToCamera);
 	}
 
 	private void recenterView() {
 		Vector3f center = Vector3f.UNIT_Y.mult(eyeHeight);
-		Vector3f eye = new Vector3f(0, eyeHeight, ipd * 10.0f);
+		Vector3f eye = new Vector3f(0, eyeHeight, ipd);
 		worldToCamera = Matrix4f.lookat(eye, center, Vector3f.UNIT_Y);
 		hmd.recenterPose();
 	}
