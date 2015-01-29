@@ -1,8 +1,11 @@
 package garndesh.oculus;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLE_STRIP;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_SHORT;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
@@ -140,50 +143,34 @@ public class CubeRenderer {
 		texture = Texture.loadTexture(Resources.TEXTURES_TEST_TEXTURE.path);
 		texture.setActiveTextureUnit(0); 
 		texture.bind();
-		/*try {
-			texture = Texture.loadImage(Resources.TEXTURES_TEST_TEXTURE);
-			glActiveTexture(GL_TEXTURE0 + 0);
-			texture.bind();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
+		
 	}
 
 	public void RenderCube() {
 
-	    glPrimitiveRestartIndex(Short.MAX_VALUE);
-	    glEnable(GL_PRIMITIVE_RESTART);
-/*
-	    program.use();
-	    OpenGL.bindAll(program);
-		glBindVertexArray(vaoID);*/
-	    //GL20.glUseProgram(program.program);
-	  //  program.use();
-		//program.setUniform("Projection", MatrixStack.PROJECTION.top());
-	   // program.setUniform("ModelView", MatrixStack.MODELVIEW.top());
-		//glPrimitiveRestartIndex(Short.MAX_VALUE);
-	   // glEnable(GL_PRIMITIVE_RESTART);
-	    
-		shader.bind();
+	    shader.bind();
 		shader.setUniform("m_proj", MatrixStack.PROJECTION.top());
 		shader.setUniform("m_view", MatrixStack.MODELVIEW.top());
 		
 
 		glBindVertexArray(vaoID);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
+		glBindTexture(GL_TEXTURE_2D, texture.id);
 		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 1);
-		
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
+		//glBindTexture(GL_TEXTURE_2D, texture.id);
 		// Draw a cube
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(GL_TRIANGLE_STRIP, 36, GL_UNSIGNED_SHORT, 0);
 		// Unbind the VAO
 
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(0);
-		
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindVertexArray(0);
 		// Unbind the shaders
 		ShaderProgram.unbind();

@@ -7,6 +7,7 @@ import static com.oculusvr.capi.OvrLibrary.ovrDistortionCaps.ovrDistortionCap_Ti
 import static com.oculusvr.capi.OvrLibrary.ovrDistortionCaps.ovrDistortionCap_Vignette;
 import static com.oculusvr.capi.OvrLibrary.ovrHmdCaps.ovrHmdCap_LowPersistence;
 import static com.oculusvr.capi.OvrLibrary.ovrHmdType.ovrHmd_DK1;
+import static com.oculusvr.capi.OvrLibrary.ovrHmdType.ovrHmd_DK2;
 import static com.oculusvr.capi.OvrLibrary.ovrRenderAPIType.ovrRenderAPI_OpenGL;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Orientation;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Position;
@@ -62,7 +63,7 @@ public abstract class OculusTest extends LwjglApp {
 	private static Hmd openFirstHmd() {
 		Hmd hmd = Hmd.create(0);
 		if (null == hmd) {
-			hmd = Hmd.createDebug(ovrHmd_DK1);
+			hmd = Hmd.createDebug(ovrHmd_DK2);
 		}
 		return hmd;
 	}
@@ -219,7 +220,7 @@ public abstract class OculusTest extends LwjglApp {
 						Pointer.createConstant(nativeWindow), null, null);
 			}
 		}
-		//hmd.enableHswDisplay(true);
+		hmd.enableHswDisplay(true);
 	}
 
 	@Override
@@ -286,7 +287,7 @@ public abstract class OculusTest extends LwjglApp {
 		if (0 != hmd.getHSWDisplayState().Displayed) {
 			Log.d(TAG,  "Dismissing the HSW");
 			hmd.dismissHSWDisplay();
-			return;
+			//return;
 		}
 
 		switch (Keyboard.getEventKey()) {
