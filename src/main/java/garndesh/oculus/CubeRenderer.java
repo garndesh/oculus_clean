@@ -149,8 +149,9 @@ public class CubeRenderer {
 	public void renderCube() {
 
 	    shader.bind();
-		shader.setUniform("m_proj", MatrixStack.PROJECTION.top());
-		shader.setUniform("m_view", MatrixStack.MODELVIEW.top());
+		shader.setUniform("position", MatrixStack.PROJECTION.top());
+		shader.setUniform("modelview", MatrixStack.MODELVIEW.top());
+		shader.setUniform("global_position", Camera.getTransform());
 		
 
 		glBindVertexArray(vaoID);

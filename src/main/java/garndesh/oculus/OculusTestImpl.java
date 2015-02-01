@@ -48,18 +48,24 @@ public class OculusTestImpl extends OculusTest {
 			mv.push();
 			{
 				//mv.set(new Matrix4f());
-				mv.translate(new Vector3f(0, -0.5F, 0));
 				mv.scale(new Vector3f(200, 1, 200));
+				mv.translate(new Vector3f(0, -0.5F, 0));
 				cube.renderCube();
 			}
 			mv.pop();
 			
 			mv.push();
 			{
-				mv.translate(new Vector3f(0, 1.65F, 0)).scale(0.1F);
-				mv.translate(new Vector3f(0, 0, -1));
+				mv.translate(new Vector3f(0, 1.65F, 0));
+				mv.translate(new Vector3f(0, 0, -2));
+				mv.scale(0.1F);
 				mv.rotate(rotation, Vector3f.UNIT_Y);
-				cube.renderCube();
+				for(int i = -5; i<=5 ; i++){
+					mv.push();
+					mv.translate(new Vector3f(2*i, 0, 0));
+					cube.renderCube();
+					mv.pop();
+				}
 			/*
 			 * for (int x = -1; x < 3; x++) { mv.push(); mv.translate(new
 			 * Vector3f( x%2*5, 0, (x-1)%2*5)); cube.RenderCube(); mv.pop(); }

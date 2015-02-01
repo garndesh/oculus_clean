@@ -9,6 +9,7 @@ import static com.oculusvr.capi.OvrLibrary.ovrHmdType.ovrHmd_DK1;
 import static com.oculusvr.capi.OvrLibrary.ovrRenderAPIType.ovrRenderAPI_OpenGL;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Orientation;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Position;
+import garndesh.oculus.Camera.Direction;
 
 import java.awt.Rectangle;
 import java.lang.reflect.Field;
@@ -45,7 +46,8 @@ public abstract class OculusTest extends LwjglApp {
 	private final OvrVector3f eyeOffsets[] = (OvrVector3f[]) new OvrVector3f()
 			.toArray(2);
 	private final FovPort fovPorts[] = (FovPort[]) new FovPort().toArray(2);
-	private final GLTexture eyeTextures[] = (GLTexture[]) new GLTexture().toArray(2);
+	private final GLTexture eyeTextures[] = (GLTexture[]) new GLTexture()
+			.toArray(2);
 	protected final Posef[] poses = (Posef[]) new Posef().toArray(2);
 	private final FrameBuffer frameBuffers[] = new FrameBuffer[2];
 	private final Matrix4f projections[] = new Matrix4f[2];
@@ -54,6 +56,8 @@ public abstract class OculusTest extends LwjglApp {
 	private final float eyeHeight;
 	private final float ipd;
 	private String TAG = "Oculus Test";
+	private float moveSpeed = 0.02F;
+	private Camera camera;
 
 	private static Hmd openFirstHmd() {
 		Hmd hmd = Hmd.create(0);
@@ -66,7 +70,7 @@ public abstract class OculusTest extends LwjglApp {
 	public OculusTest() {
 		super();
 		Hmd.initialize();
-
+		camera = new Camera();
 		try {
 			Thread.sleep(400);
 		} catch (InterruptedException e) {
@@ -95,15 +99,15 @@ public abstract class OculusTest extends LwjglApp {
 			header.TextureSize = hmd
 					.getFovTextureSize(eye, fovPorts[eye], 1.0f);
 			header.RenderViewport.Size = header.TextureSize;
-			
+
 			header.RenderViewport.Pos = new OvrVector2i(0, 0);
 		}
 
 		ipd = hmd.getFloat(OvrLibrary.OVR_KEY_IPD, OVR_DEFAULT_IPD);
 		eyeHeight = hmd.getFloat(OvrLibrary.OVR_KEY_EYE_HEIGHT,
 				OVR_DEFAULT_EYE_HEIGHT);
-		Log.d(TAG, "ipd: "+ ipd);
-		Log.d(TAG, "eyeHeight: "+eyeHeight);
+		Log.d(TAG, "ipd: " + ipd);
+		Log.d(TAG, "eyeHeight: " + eyeHeight);
 		recenterView();
 
 	}
@@ -193,7 +197,7 @@ public abstract class OculusTest extends LwjglApp {
 		rc.Header.Multisample = 1;
 
 		int distortionCaps = ovrDistortionCap_Chromatic
-				| ovrDistortionCap_TimeWarp /*| ovrDistortionCap_Vignette*/;
+				| ovrDistortionCap_TimeWarp /* | ovrDistortionCap_Vignette */;
 
 		for (int i = 0; i < rc.PlatformData.length; ++i) {
 			rc.PlatformData[i] = Pointer.createConstant(0);
@@ -215,8 +219,9 @@ public abstract class OculusTest extends LwjglApp {
 						Pointer.createConstant(nativeWindow), null, null);
 			}
 		}
-		
+
 		hmd.enableHswDisplay(true);
+		Mouse.setGrabbed(true);
 	}
 
 	@Override
@@ -227,7 +232,7 @@ public abstract class OculusTest extends LwjglApp {
 		for (int i = 0; i < 2; ++i) {
 			int eye = hmd.EyeRenderOrder[i];
 			Posef pose = eyePoses[eye];
-			MatrixStack.PROJECTION.set(projections[eye]);//.push();
+			MatrixStack.PROJECTION.set(projections[eye]);// .push();
 			// This doesn't work as it breaks the contiguous nature of the array
 			poses[eye].Orientation = pose.Orientation;
 			poses[eye].Position = pose.Position;
@@ -236,23 +241,26 @@ public abstract class OculusTest extends LwjglApp {
 			MatrixStack mv = MatrixStack.MODELVIEW;
 			mv.push();
 			{
-				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position).mult(-1));
-				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation).inverse());
+				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position).mult(
+						-1));
+				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation)
+						.inverse());
 				frameBuffers[eye].activate();
 				renderScene();
 				frameBuffers[eye].deactivate();
 			}
 			mv.pop();
-			//MatrixStack.PROJECTION.pop();
+			// MatrixStack.PROJECTION.pop();
 		}
 		hmd.endFrame(poses, eyeTextures);
 	}
 
 	@Override
 	protected void finishFrame() {
-		Display.update();
-		//Display.processMessages();
-	    MatrixStack.MODELVIEW.set(worldToCamera);
+		camera.update();
+		// Display.update();
+		Display.processMessages();
+		MatrixStack.MODELVIEW.set(worldToCamera);
 	}
 
 	private void recenterView() {
@@ -275,18 +283,41 @@ public abstract class OculusTest extends LwjglApp {
 		while (Mouse.next()) {
 			// onMouseEvent();
 		}
+		updateMovement();
 		MatrixStack.MODELVIEW.set(worldToCamera);
 	}
 
+	private void updateMovement() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_W))
+			camera.move(Direction.FORWARD, moveSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_S))
+			camera.move(Direction.BACKWARD, moveSpeed);
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_A))
+			camera.move(Direction.LEFT, moveSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_D))
+			camera.move(Direction.RIGHT, moveSpeed);
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+			camera.move(Direction.DOWN, moveSpeed);
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+			camera.move(Direction.UP, moveSpeed);
+
+		camera.rotateZ((float) 0.05 * Mouse.getDY());
+		camera.rotateY((float) -0.05 * Mouse.getDX());
+
+	}
+
 	protected void onKeyboardEvent() {
-		Log.d(TAG,  "DisplayState: "+hmd.getHSWDisplayState().Displayed);
+		Log.d(TAG, "DisplayState: " + hmd.getHSWDisplayState().Displayed);
 		if (0 != hmd.getHSWDisplayState().Displayed) {
-			Log.d(TAG,  "Dismissing the HSW");
+			Log.d(TAG, "Dismissing the HSW");
 			hmd.dismissHSWDisplay();
 			return;
 		}
 
 		switch (Keyboard.getEventKey()) {
+
 		case Keyboard.KEY_R:
 			recenterView();
 			break;
