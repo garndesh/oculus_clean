@@ -24,21 +24,21 @@ public class OculusTestImpl extends OculusTest {
 	
 	@Override
 	protected void renderScene() {
-		glClear(GL_DEPTH_BUFFER_BIT);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 		skyboxRotation++;
 		if (cube == null)
 			cube = new CubeRenderer();
 		if(skybox==null)
 			skybox = ModelBase.generateModelFromFile(Resources.MODEL_SKYBOX, Resources.TEXTURES_SKYBOX, "Cube");
 
-		float rotation = (float)( (float)skyboxRotation/(float)Short.MAX_VALUE * Math.PI);
+		float rotation = (float)( (float)skyboxRotation/(float)Short.MAX_VALUE * 2 * Math.PI);
 		//Log.d("ROT test", "rotation: "+rotation);
 		MatrixStack mv = MatrixStack.MODELVIEW;
 		mv.push();
 		{
 			mv.push();
 			{
-				mv.set(new Matrix4f());
+				//mv.set(new Matrix4f());
 				mv.translate(new Vector3f(0, 20, 0));
 				//mv.scale(0.1F);
 				mv.rotate(rotation, Vector3f.UNIT_Y);
@@ -47,10 +47,10 @@ public class OculusTestImpl extends OculusTest {
 			mv.pop();
 			mv.push();
 			{
-				mv.set(new Matrix4f());
+				//mv.set(new Matrix4f());
 				mv.translate(new Vector3f(0, -0.5F, 0));
 				mv.scale(new Vector3f(200, 1, 200));
-				cube.RenderCube();
+				cube.renderCube();
 			}
 			mv.pop();
 			
@@ -59,7 +59,7 @@ public class OculusTestImpl extends OculusTest {
 				mv.translate(new Vector3f(0, 1.65F, 0)).scale(0.1F);
 				mv.translate(new Vector3f(0, 0, -1));
 				mv.rotate(rotation, Vector3f.UNIT_Y);
-				cube.RenderCube();
+				cube.renderCube();
 			/*
 			 * for (int x = -1; x < 3; x++) { mv.push(); mv.translate(new
 			 * Vector3f( x%2*5, 0, (x-1)%2*5)); cube.RenderCube(); mv.pop(); }

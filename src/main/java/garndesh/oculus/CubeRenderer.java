@@ -146,7 +146,7 @@ public class CubeRenderer {
 		
 	}
 
-	public void RenderCube() {
+	public void renderCube() {
 
 	    shader.bind();
 		shader.setUniform("m_proj", MatrixStack.PROJECTION.top());
