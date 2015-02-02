@@ -1,7 +1,7 @@
 #version 330
 
 uniform mat4 position = mat4(1);
-uniform mat4 global_position = mat4(1);
+//uniform mat4 global_position = mat4(1);
 uniform mat4 modelview = mat4(1);
 
 layout(location = 0) in vec3 Position;
@@ -11,5 +11,5 @@ out vec2 textureCoords;
 
 void main() {
 	textureCoords = tex;
-	gl_Position = global_position * position * modelview * vec4(Position, 1.0);
+	gl_Position = position * modelview * vec4(Position, 1.0);
 }

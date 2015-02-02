@@ -59,10 +59,10 @@ public class OculusTestImpl extends OculusTest {
 				mv.translate(new Vector3f(0, 1.65F, 0));
 				mv.translate(new Vector3f(0, 0, -2));
 				mv.scale(0.1F);
-				mv.rotate(rotation, Vector3f.UNIT_Y);
 				for(int i = -5; i<=5 ; i++){
 					mv.push();
 					mv.translate(new Vector3f(2*i, 0, 0));
+					mv.rotate(rotation, Vector3f.UNIT_Y);
 					cube.renderCube();
 					mv.pop();
 				}

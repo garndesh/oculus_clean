@@ -220,7 +220,7 @@ public abstract class OculusTest extends LwjglApp {
 			}
 		}
 
-		hmd.enableHswDisplay(true);
+		hmd.enableHswDisplay(false);
 		Mouse.setGrabbed(true);
 	}
 
@@ -229,10 +229,15 @@ public abstract class OculusTest extends LwjglApp {
 		++frameCount;
 		hmd.beginFrame(frameCount);
 		Posef eyePoses[] = hmd.getEyePoses(frameCount, eyeOffsets);
+		//MatrixStack pr = MatrixStack.PROJECTION;
 		for (int i = 0; i < 2; ++i) {
 			int eye = hmd.EyeRenderOrder[i];
 			Posef pose = eyePoses[eye];
-			MatrixStack.PROJECTION.set(projections[eye]);// .push();
+			//pr.set(projections[eye]);// .push();
+			MatrixStack.PROJECTION.set(projections[eye]);
+			//pr.translate(RiftUtils.toVector3f(camera.getPosition()).mult(-1F));
+			//pr.rotate(RiftUtils.toQuaternion(camera.getOrientation()).inverse());
+			
 			// This doesn't work as it breaks the contiguous nature of the array
 			poses[eye].Orientation = pose.Orientation;
 			poses[eye].Position = pose.Position;
@@ -241,10 +246,11 @@ public abstract class OculusTest extends LwjglApp {
 			MatrixStack mv = MatrixStack.MODELVIEW;
 			mv.push();
 			{
-				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position).mult(
-						-1));
-				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation)
-						.inverse());
+				mv.preTranslate(RiftUtils.toVector3f(camera.getPosition()).mult(-1));
+				mv.preTranslate(RiftUtils.toVector3f(poses[eye].Position) .mult(-1));
+				mv.preRotate(RiftUtils.toQuaternion(camera.getOrientation()).inverse());
+				mv.preRotate(RiftUtils.toQuaternion(poses[eye].Orientation) .inverse());
+			
 				frameBuffers[eye].activate();
 				renderScene();
 				frameBuffers[eye].deactivate();
@@ -313,7 +319,7 @@ public abstract class OculusTest extends LwjglApp {
 		if (0 != hmd.getHSWDisplayState().Displayed) {
 			Log.d(TAG, "Dismissing the HSW");
 			hmd.dismissHSWDisplay();
-			return;
+			//return;
 		}
 
 		switch (Keyboard.getEventKey()) {

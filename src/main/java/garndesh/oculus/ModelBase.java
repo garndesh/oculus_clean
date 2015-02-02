@@ -109,9 +109,9 @@ public class ModelBase {
 	public void renderModel() {
 
 		shader.bind();
-		shader.setUniform("m_proj", MatrixStack.PROJECTION.top());
-		shader.setUniform("m_view", MatrixStack.MODELVIEW.top());
-		shader.setUniform("global_position", Camera.getTransform());
+		shader.setUniform("position", MatrixStack.PROJECTION.top());
+		shader.setUniform("modelview", MatrixStack.MODELVIEW.top());
+		//shader.setUniform("global_position", Camera.getTransform());
 		
 		// Bind the VAO
 		// Bind the VAO

@@ -6,7 +6,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 import org.lwjgl.util.vector.Vector3f;
-import org.saintandreas.gl.MatrixStack;
 
 public class Camera {
 	
@@ -39,6 +38,14 @@ public class Camera {
 		forward = AXIS_X;
 		right = AXIS_Z;
 		up = AXIS_Y;
+	}
+	
+	public Vector3f getPosition(){
+		return position;
+	}
+	
+	public Quaternion getOrientation(){
+		return orientation;
 	}
 		
 	public void rotateY(float angle){
@@ -105,12 +112,21 @@ public class Camera {
 	public void update(){
 		
 		// Rotate the scene and translate the world back
-	    //QuaternionUtil.toRotationMatrix(orientation, view);
-	    //Matrix4f.translate(position.negate(null), view, view);
+	    QuaternionUtil.toRotationMatrix(orientation, view);
+	    Matrix4f.translate(position.negate(null), view, view);
 
 	    // Store the view matrix in the buffer
-	    //view.store(transform);
-	    //transform.rewind();
+	    view.store(transform);
+	    transform.rewind();
+	}
+	
+	public Matrix4f getView(){
+		return view;
+	}
+	
+	public org.saintandreas.math.Matrix4f getViewSA(){
+		//return new org.saintandreas.math.Matrix4f(transform);
+		return RiftUtils.toMatrix4f(view);
 	}
 	
 	public void setPosition(Vector3f position){
