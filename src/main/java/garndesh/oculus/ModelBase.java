@@ -142,7 +142,7 @@ public class ModelBase {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindVertexArray(0);
 		// Unbind the shaders
-		ShaderProgram.unbind();
+		//ShaderProgram.unbind();
 	}
 
 	public void dispose() {

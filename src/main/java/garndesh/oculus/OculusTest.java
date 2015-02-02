@@ -56,7 +56,7 @@ public abstract class OculusTest extends LwjglApp {
 	private final float eyeHeight;
 	private final float ipd;
 	private String TAG = "Oculus Test";
-	private float moveSpeed = 0.02F;
+	private float moveSpeed = 0.2F;
 	private Camera camera;
 
 	private static Hmd openFirstHmd() {
@@ -264,8 +264,8 @@ public abstract class OculusTest extends LwjglApp {
 	@Override
 	protected void finishFrame() {
 		camera.update();
-		// Display.update();
-		Display.processMessages();
+		Display.update();
+		//Display.processMessages();
 		MatrixStack.MODELVIEW.set(worldToCamera);
 	}
 
@@ -279,10 +279,10 @@ public abstract class OculusTest extends LwjglApp {
 	@Override
 	public void update() {
 		while (Keyboard.next()) {
-			Log.d(TAG,
-					"KeyboardEvent " + Keyboard.getEventCharacter() + " "
-							+ Keyboard.getEventKey() + " "
-							+ Keyboard.getKeyName(Keyboard.getEventKey()));
+//			Log.d(TAG,
+//					"KeyboardEvent " + Keyboard.getEventCharacter() + " "
+//							+ Keyboard.getEventKey() + " "
+//							+ Keyboard.getKeyName(Keyboard.getEventKey()));
 			onKeyboardEvent();
 		}
 
@@ -309,8 +309,8 @@ public abstract class OculusTest extends LwjglApp {
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
 			camera.move(Direction.UP, moveSpeed);
 
-		camera.rotateZ((float) 0.05 * Mouse.getDY());
-		camera.rotateY((float) -0.05 * Mouse.getDX());
+		//camera.rotateZ((float) 0.1 * Mouse.getDY());
+		camera.rotateY((float) -0.1 * Mouse.getDX());
 
 	}
 
