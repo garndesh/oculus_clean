@@ -3,6 +3,7 @@ package garndesh.oculus;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
+import garndesh.oculus.tiles.TileWorld;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -12,16 +13,46 @@ import org.saintandreas.math.Vector3f;
 
 public class OculusTestImpl extends OculusTest {
 
-	private static OculusTestImpl instance;
+	private static final String TAG = "testImpl";
+	public static OculusTestImpl instance;
 	private CubeRenderer cube;
 	private ModelBase skybox;
+	private ModelBase jasper;
 	private short skyboxRotation = 0;
+	
+	private WorldMap map;
 
 	public OculusTestImpl() {
 		super();
 		instance = this;
 	}
 	
+	@Override
+	public void initGl(){
+		super.initGl();
+		map = new WorldMap();
+		fillWorldMap();
+		jasper = ModelBase.generateModelFromFile(Resources.MODEL_JASPER, Resources.TEXTURES_JASPER, "JasperFinal");
+	}
+	
+	private void fillWorldMap() {
+		int radius = 10;
+		for(int q = -radius; q <=radius; q++){
+			for(int r = -radius; r <= radius; r++){
+				if(Math.abs(r+q)>radius)
+					continue;
+				HexPosition pos = new HexPosition(q, r);
+				if(Math.abs(Math.abs(r)-Math.abs(q))==2){
+					Log.d(TAG, "Adding walltile at: "+pos.getR()+","+pos.getQ());
+					map.addToMap(pos, TileWorld.tileWallDirt);
+				} else {
+					map.addToMap(pos, TileWorld.tileFloorDirt);
+				}
+			}
+		}
+		
+	}
+
 	@Override
 	protected void renderScene() {
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -45,14 +76,29 @@ public class OculusTestImpl extends OculusTest {
 				skybox.renderModel();
 			}
 			mv.pop();
+			map.renderWorld();
+			
+			
 			mv.push();
+			
+			for(int i = 0; i<6; i++){
+				mv.push();
+				mv.rotate((float) ((float)i*Math.PI)/3F, Vector3f.UNIT_Y);
+				mv.translate(new Vector3f(14, -2, 0));
+				mv.scale(0.4f);
+				mv.rotate((float) (-0.5*Math.PI), Vector3f.UNIT_Y);
+				jasper.renderModel();
+				mv.pop();
+			}
+			mv.pop();
+			/*mv.push();
 			{
 				//mv.set(new Matrix4f());
 				mv.scale(new Vector3f(20, 1, 20));
 				//mv.translate(new Vector3f(0, -0.5F, 0));
 				cube.renderCube();
-			}
-			mv.pop();
+			}*/
+			//mv.pop();
 			
 			mv.push();
 			{
@@ -82,6 +128,10 @@ public class OculusTestImpl extends OculusTest {
 		// instance.dispose();
 		Display.destroy();
 		System.exit(0);
+	}
+	
+	public WorldMap getMap(){
+		return map;
 	}
 
 }

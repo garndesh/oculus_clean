@@ -9,6 +9,8 @@ import static com.oculusvr.capi.OvrLibrary.ovrHmdType.ovrHmd_DK1;
 import static com.oculusvr.capi.OvrLibrary.ovrRenderAPIType.ovrRenderAPI_OpenGL;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Orientation;
 import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Position;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.glEnable;
 import garndesh.oculus.Camera.Direction;
 
 import java.awt.Rectangle;
@@ -219,8 +221,10 @@ public abstract class OculusTest extends LwjglApp {
 						Pointer.createConstant(nativeWindow), null, null);
 			}
 		}
+		
+		glEnable(GL_DEPTH_TEST);
 
-		hmd.enableHswDisplay(false);
+		//hmd.enableHswDisplay(false);
 		Mouse.setGrabbed(true);
 	}
 
@@ -264,8 +268,8 @@ public abstract class OculusTest extends LwjglApp {
 	@Override
 	protected void finishFrame() {
 		camera.update();
-		Display.update();
-		//Display.processMessages();
+		//Display.update();
+		Display.processMessages();
 		MatrixStack.MODELVIEW.set(worldToCamera);
 	}
 
@@ -315,7 +319,7 @@ public abstract class OculusTest extends LwjglApp {
 	}
 
 	protected void onKeyboardEvent() {
-		Log.d(TAG, "DisplayState: " + hmd.getHSWDisplayState().Displayed);
+		//Log.d(TAG, "DisplayState: " + hmd.getHSWDisplayState().Displayed);
 		if (0 != hmd.getHSWDisplayState().Displayed) {
 			Log.d(TAG, "Dismissing the HSW");
 			hmd.dismissHSWDisplay();

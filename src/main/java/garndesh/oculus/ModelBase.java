@@ -272,6 +272,7 @@ public class ModelBase {
 				}
 				if (normals) {
 					short normal = (short) (Short.valueOf(indecies[2]) - 1);
+					//System.out.println(normal);
 					vertices.put(tList.get(normal * 3));
 					vertices.put(tList.get(normal * 3 + 1));
 					vertices.put(tList.get(normal * 3 + 2));
