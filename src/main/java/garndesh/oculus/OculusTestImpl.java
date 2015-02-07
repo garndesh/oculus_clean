@@ -17,7 +17,7 @@ public class OculusTestImpl extends OculusTest {
 	public static OculusTestImpl instance;
 	private CubeRenderer cube;
 	private ModelBase skybox;
-	private ModelBase jasper;
+	//private ModelBase jasper;
 	private short skyboxRotation = 0;
 	
 	private WorldMap map;
@@ -32,18 +32,18 @@ public class OculusTestImpl extends OculusTest {
 		super.initGl();
 		map = new WorldMap();
 		fillWorldMap();
-		jasper = ModelBase.generateModelFromFile(Resources.MODEL_JASPER, Resources.TEXTURES_JASPER, "JasperFinal");
+		//jasper = ModelBase.generateModelFromFile(Resources.MODEL_JASPER, Resources.TEXTURES_JASPER, "JasperFinal");
 	}
 	
 	private void fillWorldMap() {
-		int radius = 10;
+		int radius = 30;
 		for(int q = -radius; q <=radius; q++){
 			for(int r = -radius; r <= radius; r++){
 				if(Math.abs(r+q)>radius)
 					continue;
 				HexPosition pos = new HexPosition(q, r);
 				if(Math.abs(Math.abs(r)-Math.abs(q))==2){
-					Log.d(TAG, "Adding walltile at: "+pos.getR()+","+pos.getQ());
+					//Log.d(TAG, "Adding walltile at: "+pos.getR()+","+pos.getQ());
 					map.addToMap(pos, TileWorld.tileWallDirt);
 				} else {
 					map.addToMap(pos, TileWorld.tileFloorDirt);
@@ -62,7 +62,7 @@ public class OculusTestImpl extends OculusTest {
 		if(skybox==null)
 			skybox = ModelBase.generateModelFromFile(Resources.MODEL_SKYBOX, Resources.TEXTURES_SKYBOX, "Cube");
 
-		float rotation = (float)( (float)skyboxRotation/(float)Short.MAX_VALUE * 2 * Math.PI);
+		//float rotation = (float)( (float)skyboxRotation/(float)Short.MAX_VALUE * 2 * Math.PI);
 		//Log.d("ROT test", "rotation: "+rotation);
 		MatrixStack mv = MatrixStack.MODELVIEW;
 		mv.push();
@@ -71,7 +71,7 @@ public class OculusTestImpl extends OculusTest {
 			{
 				//mv.set(new Matrix4f());
 				mv.translate(new Vector3f(0, 20, 0));
-				//mv.scale(0.1F);
+				mv.scale(10F);
 				//mv.rotate(rotation, Vector3f.UNIT_Y);
 				skybox.renderModel();
 			}
@@ -87,7 +87,7 @@ public class OculusTestImpl extends OculusTest {
 				mv.translate(new Vector3f(14, -2, 0));
 				mv.scale(0.4f);
 				mv.rotate((float) (-0.5*Math.PI), Vector3f.UNIT_Y);
-				jasper.renderModel();
+				//jasper.renderModel();
 				mv.pop();
 			}
 			mv.pop();
@@ -108,7 +108,7 @@ public class OculusTestImpl extends OculusTest {
 				for(int i = -5; i<=5 ; i++){
 					mv.push();
 					mv.translate(new Vector3f(2*i, 0, 0));
-					mv.rotate(rotation, Vector3f.UNIT_Y);
+					//mv.rotate(rotation, Vector3f.UNIT_Y);
 					cube.renderCube();
 					mv.pop();
 				}

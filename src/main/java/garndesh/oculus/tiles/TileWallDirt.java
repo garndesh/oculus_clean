@@ -23,7 +23,7 @@ public class TileWallDirt extends TileWorld{
 	@Override
 	public void renderTile(WorldMap map, HexPosition pos) {
 		MatrixStack.MODELVIEW.push();
-		MatrixStack.MODELVIEW.translate(new Vector3f(0, 3, 0));
+		MatrixStack.MODELVIEW.translate(new Vector3f(0, 2.8F, 0));
 		ceiling.renderModel();
 		MatrixStack.MODELVIEW.pop();
 		for(byte r = 0; r < 6; r++){
