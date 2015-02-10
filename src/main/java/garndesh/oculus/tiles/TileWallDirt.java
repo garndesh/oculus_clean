@@ -20,6 +20,7 @@ public class TileWallDirt extends TileWorld{
 		this.wall = ModelBase.generateModelFromFile(Resources.MODEL_WALL, Resources.TEXTURES_WALL, "Wall");
 	}
 	
+	
 	@Override
 	public void renderTile(WorldMap map, HexPosition pos) {
 		MatrixStack.MODELVIEW.push();
@@ -46,5 +47,6 @@ public class TileWallDirt extends TileWorld{
 			}
 		}*/
 	}
+
 
 }

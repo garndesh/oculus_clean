@@ -44,9 +44,9 @@ public class OculusTestImpl extends OculusTest {
 				HexPosition pos = new HexPosition(q, r);
 				if(Math.abs(Math.abs(r)-Math.abs(q))==2){
 					//Log.d(TAG, "Adding walltile at: "+pos.getR()+","+pos.getQ());
-					map.addToMap(pos, TileWorld.tileWallDirt);
+					map.addToMap(pos, (TileWorld) TileWorld.tiles.getObject("tileWallDirt"));
 				} else {
-					map.addToMap(pos, TileWorld.tileFloorDirt);
+					map.addToMap(pos, (TileWorld) TileWorld.tiles.getObject("tileFloorDirt"));
 				}
 			}
 		}
