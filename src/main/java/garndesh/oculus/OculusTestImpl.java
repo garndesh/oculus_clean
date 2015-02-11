@@ -3,7 +3,9 @@ package garndesh.oculus;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
+import garndesh.oculus.model.ModelBase;
 import garndesh.oculus.tiles.TileWorld;
+import garndesh.oculus.util.HexPosition;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;

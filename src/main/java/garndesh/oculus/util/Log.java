@@ -1,4 +1,4 @@
-package garndesh.oculus;
+package garndesh.oculus.util;
 
 public class Log {
 	public static void d(String tag, String message){

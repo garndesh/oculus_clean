@@ -2,6 +2,7 @@ package garndesh.oculus;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
+import garndesh.oculus.util.FileUtil;
 
 import java.nio.FloatBuffer;
 

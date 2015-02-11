@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class Texture {
 
-	int width, height, id;
+	public final int width, height, id;
 
 	/**
 	 * A private constructor just to store the values

@@ -1,4 +1,4 @@
-package garndesh.oculus;
+package garndesh.oculus.util;
 
 import org.saintandreas.math.Vector3f;
 

@@ -1,9 +1,9 @@
 package garndesh.oculus.tiles;
 
-import garndesh.oculus.HexPosition;
-import garndesh.oculus.ModelBase;
-import garndesh.oculus.NamedList;
 import garndesh.oculus.WorldMap;
+import garndesh.oculus.model.ModelBase;
+import garndesh.oculus.util.HexPosition;
+import garndesh.oculus.util.NamedList;
 
 import java.util.ArrayList;
 import java.util.List;

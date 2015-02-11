@@ -1,4 +1,4 @@
-package garndesh.oculus;
+package garndesh.oculus.model;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -20,6 +20,9 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import garndesh.oculus.Resources;
+import garndesh.oculus.ShaderProgram;
+import garndesh.oculus.Texture;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

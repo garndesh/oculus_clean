@@ -3,12 +3,12 @@ package garndesh.oculus.tiles;
 import org.saintandreas.gl.MatrixStack;
 import org.saintandreas.math.Vector3f;
 
-import garndesh.oculus.HexPosition;
-import garndesh.oculus.Log;
-import garndesh.oculus.ModelBase;
 import garndesh.oculus.OculusTestImpl;
 import garndesh.oculus.Resources;
 import garndesh.oculus.WorldMap;
+import garndesh.oculus.model.ModelBase;
+import garndesh.oculus.util.HexPosition;
+import garndesh.oculus.util.Log;
 
 public class TileWallDirt extends TileWorld{
 

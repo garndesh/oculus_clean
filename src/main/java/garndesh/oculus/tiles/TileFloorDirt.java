@@ -1,9 +1,9 @@
 package garndesh.oculus.tiles;
 
-import garndesh.oculus.HexPosition;
-import garndesh.oculus.ModelBase;
 import garndesh.oculus.Resources;
 import garndesh.oculus.WorldMap;
+import garndesh.oculus.model.ModelBase;
+import garndesh.oculus.util.HexPosition;
 
 
 public class TileFloorDirt extends TileWorld{

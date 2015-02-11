@@ -12,6 +12,8 @@ import static com.oculusvr.capi.OvrLibrary.ovrTrackingCaps.ovrTrackingCap_Positi
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.glEnable;
 import garndesh.oculus.Camera.Direction;
+import garndesh.oculus.util.Log;
+import garndesh.oculus.util.RiftUtils;
 
 import java.awt.Rectangle;
 import java.lang.reflect.Field;

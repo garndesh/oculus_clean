@@ -1,4 +1,7 @@
-package garndesh.oculus;
+package garndesh.oculus.util;
+
+import garndesh.oculus.OculusTestImpl;
+import garndesh.oculus.ShaderProgram;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

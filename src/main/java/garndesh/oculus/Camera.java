@@ -1,5 +1,8 @@
 package garndesh.oculus;
 
+import garndesh.oculus.util.QuaternionUtil;
+import garndesh.oculus.util.RiftUtils;
+
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;

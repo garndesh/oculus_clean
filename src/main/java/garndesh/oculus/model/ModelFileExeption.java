@@ -1,4 +1,4 @@
-package garndesh.oculus;
+package garndesh.oculus.model;
 
 public class ModelFileExeption extends Exception{
 

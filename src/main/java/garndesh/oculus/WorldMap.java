@@ -1,6 +1,7 @@
 package garndesh.oculus;
 
 import garndesh.oculus.tiles.TileWorld;
+import garndesh.oculus.util.HexPosition;
 
 import java.util.HashMap;
 

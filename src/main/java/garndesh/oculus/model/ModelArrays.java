@@ -1,4 +1,4 @@
-package garndesh.oculus;
+package garndesh.oculus.model;
 
 import java.util.ArrayList;
 import java.util.List;

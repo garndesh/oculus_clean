@@ -1,4 +1,4 @@
-package garndesh.oculus;
+package garndesh.oculus.util;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
