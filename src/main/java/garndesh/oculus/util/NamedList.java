@@ -6,12 +6,23 @@ import java.util.List;
 
 
 @SuppressWarnings({"rawtypes","unchecked"})
-public class NamedList {
+public class NamedList<E> {
 
-	private List list = new ArrayList();
-	private HashMap<String, Integer> names = new HashMap<String, Integer>();
+	private List list;
+	private HashMap<String, Integer> names;
 	
-	public void addToList(String name, Object obj){
+	public NamedList(){
+		list = new ArrayList<E>();
+		names = new HashMap<String, Integer>();
+	}
+	
+	public NamedList(int capacity){
+		list = new ArrayList<E>(capacity);
+		names = new HashMap<String, Integer>((int) (capacity*1.5));
+	}
+	
+	
+	public void addToList(String name, E obj){
 		if(!names.containsKey(name)){
 			names.put(name, list.size());
 			list.add(obj);
@@ -24,8 +35,8 @@ public class NamedList {
 		return names.get(name);
 	}
 	
-	public Object getObject(int index){
-		return list.get(index);
+	public E getObject(int index){
+		return (E) list.get(index);
 	}
 	
 	public Object getObject(String name){

@@ -5,10 +5,10 @@ import org.saintandreas.math.Vector3f;
 
 import garndesh.oculus.OculusTestImpl;
 import garndesh.oculus.Resources;
-import garndesh.oculus.WorldMap;
 import garndesh.oculus.model.ModelBase;
 import garndesh.oculus.util.HexPosition;
 import garndesh.oculus.util.Log;
+import garndesh.oculus.world.WorldMap;
 
 public class TileWallDirt extends TileWorld{
 
@@ -22,7 +22,7 @@ public class TileWallDirt extends TileWorld{
 	
 	
 	@Override
-	public void renderTile(WorldMap map, HexPosition pos) {
+	public void renderTile(HexPosition pos) {
 		MatrixStack.MODELVIEW.push();
 		MatrixStack.MODELVIEW.translate(new Vector3f(0, 2.8F, 0));
 		ceiling.renderModel();

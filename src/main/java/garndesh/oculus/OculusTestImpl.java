@@ -6,6 +6,8 @@ import static org.lwjgl.opengl.GL11.glClear;
 import garndesh.oculus.model.ModelBase;
 import garndesh.oculus.tiles.TileWorld;
 import garndesh.oculus.util.HexPosition;
+import garndesh.oculus.world.ChunkGenerator;
+import garndesh.oculus.world.WorldMap;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -38,18 +40,9 @@ public class OculusTestImpl extends OculusTest {
 	}
 	
 	private void fillWorldMap() {
-		int radius = 30;
-		for(int q = -radius; q <=radius; q++){
-			for(int r = -radius; r <= radius; r++){
-				if(Math.abs(r+q)>radius)
-					continue;
-				HexPosition pos = new HexPosition(q, r);
-				if(Math.abs(Math.abs(r)-Math.abs(q))==2){
-					//Log.d(TAG, "Adding walltile at: "+pos.getR()+","+pos.getQ());
-					map.addToMap(pos, (TileWorld) TileWorld.tiles.getObject("tileWallDirt"));
-				} else {
-					map.addToMap(pos, (TileWorld) TileWorld.tiles.getObject("tileFloorDirt"));
-				}
+		for(int q = -1; q <=1; q++){
+			for(int r = -1; r <= 1; r++){
+				map.addToMap(ChunkGenerator.generateChunk(r, q));
 			}
 		}
 		
