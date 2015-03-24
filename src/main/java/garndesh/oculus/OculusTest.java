@@ -320,7 +320,7 @@ public abstract class OculusTest extends LwjglApp {
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
 			camera.move(Direction.UP, moveSpeed);
 
-		//camera.rotateZ((float) 0.1 * Mouse.getDY());
+		camera.rotateZ((float) 0.1 * Mouse.getDY());
 		camera.rotateY((float) -0.1 * Mouse.getDX());
 
 	}

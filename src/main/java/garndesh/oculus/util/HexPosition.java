@@ -13,43 +13,16 @@ public class HexPosition {
 	public static final byte[][] NEIGHBORS = new byte[][]{ {1, 0}, {1, -1}, {0, 1}, {1, 0}, {-1, 1}, {0, -1}};
 	
 	public HexPosition(){
-		this(0, 0, 0);
+		this(0, 0);
 	}
 	
 	public HexPosition(int r, int q){
-		this(q, r, 1F);
-	}
-	
-	public HexPosition(int r, int q, float s){
 		this.q = q;
 		this.r = r;
-		this.scale = s;
-		
-	}
-	/*
-	public HexPosition(int i, int j, int k){
-		this.q = i;
-		this.r = k;
-	}
-	
-	public HexPosition(int i, int j, int k, float s){
-		this(i, j, k);
-		this.scale = s;
-	}*/
-	
-	public void setScale(float scale){
-		this.scale = scale;
-		updateCartasian();
-	}
-	
-	private void updateCartasian(){
-		//this.cartesian = new Vector3f((float)((double)j*1.5F*scale), 0, (float)(((double)i+(double)k)*cos30*scale) );
-	}
-	
+	}	
 	
 	public Vector3f toCartesian(){
-		return new Vector3f((float)q*1.5F, 0,(float)( ((float)-q*HALF_HIGHT)-((float)r)*UNIT_HIGHT)).scale(scale);
-		//return new Vector3f((float)( ((float)q*0.5)-((float)r)), 0,(float)q*1.5F).scale(scale);
+		return new Vector3f((float)q*1.5F, 0,(float)( ((float)-q*HALF_HIGHT)-((float)r)*UNIT_HIGHT));
 	}
 
 	public int getQ() {

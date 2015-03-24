@@ -13,6 +13,6 @@ public class HexPosUtil {
 	
 	public static double getAngleFromRelativeCoords(int r, int q){
 		Vector3f v = getVectorFromAxial(r, q);
-		return Math.atan2(v.x, v.z);
+		return Math.atan2(v.x, -v.z);
 	}
 }

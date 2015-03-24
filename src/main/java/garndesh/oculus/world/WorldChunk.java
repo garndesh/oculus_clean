@@ -7,6 +7,7 @@ import garndesh.oculus.util.HexPosition;
 import garndesh.oculus.util.Log;
 
 import org.saintandreas.gl.MatrixStack;
+import org.saintandreas.math.Vector3f;
 
 public class WorldChunk {
 
@@ -58,6 +59,8 @@ public class WorldChunk {
 				// Log.d("WorldChunk", "rendering tile @ x: "+x+" y "+y);
 				mv.push();
 				mv.translate(HexPosUtil.getVectorFromAxial(x, y));
+				/*if(Math.abs(x-y)<2)
+					mv.translate(new Vector3f(0, 0.3F*x, 0.3F*y));*/
 				TileWorld.tiles.getObject(
 						getTile((byte) (x + CHUNK_RADIUS),
 								(byte) (y + CHUNK_RADIUS))).renderTile(
