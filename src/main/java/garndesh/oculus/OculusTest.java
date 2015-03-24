@@ -21,6 +21,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.lwjgl.LWJGLUtil;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.ContextAttribs;
@@ -62,6 +63,8 @@ public abstract class OculusTest extends LwjglApp {
 	private String TAG = "Oculus Test";
 	private float moveSpeed = 0.2F;
 	private Camera camera;
+	
+	private long time;
 
 	private static Hmd openFirstHmd() {
 		Hmd hmd = Hmd.create(0);
@@ -232,6 +235,7 @@ public abstract class OculusTest extends LwjglApp {
 
 	@Override
 	public final void drawFrame() {
+		time = getTime();
 		++frameCount;
 		hmd.beginFrame(frameCount);
 		Posef eyePoses[] = hmd.getEyePoses(frameCount, eyeOffsets);
@@ -265,6 +269,7 @@ public abstract class OculusTest extends LwjglApp {
 			// MatrixStack.PROJECTION.pop();
 		}
 		hmd.endFrame(poses, eyeTextures);
+		//Log.d(TAG, "frameTime: "+(getTime()-time));
 	}
 
 	@Override
@@ -352,4 +357,13 @@ public abstract class OculusTest extends LwjglApp {
 
 	protected abstract void renderScene();
 
+	
+	/**
+	 * Get the time in milliseconds
+	 *
+	 * @return The system time in milliseconds
+	 */
+	public long getTime() {
+	    return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+	}
 }

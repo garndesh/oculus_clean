@@ -54,17 +54,17 @@ public class ModelBase {
 	public ModelBase(FloatBuffer vertices, ShortBuffer elements,
 			boolean tex, boolean norm, Texture texture) {
 
-		System.out.println("Creating modelBaseTest");
+		//System.out.println("Creating modelBaseTest");
 		this.texture = texture;
 		this.textured = tex;
 		this.normals = norm;
 		this.elementCount = elements.limit();
 		int vLength = 3 + (tex ? 2 : 0) + (norm ? 3 : 0);
-		System.out.println("vLength is: " + vLength);
+		//System.out.println("vLength is: " + vLength);
 		// Create a VAO
 		vaoID = glGenVertexArrays();
 		glBindVertexArray(vaoID);
-		System.out.println("Starting buffer creation");
+		//System.out.println("Starting buffer creation");
 		// Create a VBO
 		vboID = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
@@ -93,11 +93,11 @@ public class ModelBase {
 		// Unbind the VAO
 		glBindVertexArray(0);
 
-		System.out.println("Buffers Created, binding texture");
+		//System.out.println("Buffers Created, binding texture");
 
 		this.texture.setActiveTextureUnit(0);
 		this.texture.bind();
-		System.out.println("texture bound");
+		//System.out.println("texture bound");
 		
 
 		shader = new ShaderProgram();
@@ -116,8 +116,17 @@ public class ModelBase {
 		shader.setUniform("modelview", MatrixStack.MODELVIEW.top());
 		//shader.setUniform("global_position", Camera.getTransform());
 		
-		// Bind the VAO
-		// Bind the VAO
+		preDraw();
+		
+		draw();
+		
+		
+		postDraw();
+		// Unbind the shaders
+		ShaderProgram.unbind();
+	}
+	
+	public void preDraw(){
 		glBindVertexArray(vaoID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboID);
 		glBindTexture(GL_TEXTURE_2D, texture.id);
@@ -131,21 +140,24 @@ public class ModelBase {
 			//glBindVertexArray(nboID);
 			glEnableVertexAttribArray(2);
 		}
-		// Draw a cube
+	}
+	
+	public void draw(){
 		glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_SHORT, 0);
+	}
+	
+	public void postDraw(){
 		// Unbind the VAO
-		glEnableVertexAttribArray(0);
-		if (textured)
-			glDisableVertexAttribArray(1);
-		if (normals)
-			glDisableVertexAttribArray(2);
+				glEnableVertexAttribArray(0);
+				if (textured)
+					glDisableVertexAttribArray(1);
+				if (normals)
+					glDisableVertexAttribArray(2);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glBindVertexArray(0);
-		// Unbind the shaders
-		//ShaderProgram.unbind();
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glBindVertexArray(0);
 	}
 
 	public void dispose() {

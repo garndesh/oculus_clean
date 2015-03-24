@@ -40,8 +40,13 @@ public class OculusTestImpl extends OculusTest {
 	}
 	
 	private void fillWorldMap() {
-		for(int q = -1; q <=1; q++){
-			for(int r = -1; r <= 1; r++){
+		//map.addToMap(ChunkGenerator.generateChunk(0, 0));
+		//map.addToMap(ChunkGenerator.generateChunk(1, 0));
+		int raduis = 4;
+		for(int q = -raduis; q <=raduis; q++){
+			for(int r = -raduis; r <= raduis; r++){
+				if(Math.abs(r+q)>raduis)
+					continue;
 				map.addToMap(ChunkGenerator.generateChunk(r, q));
 			}
 		}
@@ -73,28 +78,6 @@ public class OculusTestImpl extends OculusTest {
 			mv.pop();
 			map.renderWorld();
 			
-			
-			mv.push();
-			
-			for(int i = 0; i<6; i++){
-				mv.push();
-				mv.rotate((float) ((float)i*Math.PI)/3F, Vector3f.UNIT_Y);
-				mv.translate(new Vector3f(14, -2, 0));
-				mv.scale(0.4f);
-				mv.rotate((float) (-0.5*Math.PI), Vector3f.UNIT_Y);
-				//jasper.renderModel();
-				mv.pop();
-			}
-			mv.pop();
-			/*mv.push();
-			{
-				//mv.set(new Matrix4f());
-				mv.scale(new Vector3f(20, 1, 20));
-				//mv.translate(new Vector3f(0, -0.5F, 0));
-				cube.renderCube();
-			}*/
-			//mv.pop();
-			
 			mv.push();
 			{
 				mv.translate(new Vector3f(0, 1.65F, 0));
@@ -105,6 +88,7 @@ public class OculusTestImpl extends OculusTest {
 					mv.translate(new Vector3f(2*i, 0, 0));
 					//mv.rotate(rotation, Vector3f.UNIT_Y);
 					cube.renderCube();
+					//TileWorld.getTile(1).renderTile(0, i);
 					mv.pop();
 				}
 			/*
@@ -128,5 +112,4 @@ public class OculusTestImpl extends OculusTest {
 	public WorldMap getMap(){
 		return map;
 	}
-
 }

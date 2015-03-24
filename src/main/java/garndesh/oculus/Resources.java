@@ -8,7 +8,7 @@ public enum Resources implements Resource {
 	TEXTURES_SKYBOX("garndesh/oculus/textures/skybox.png"),
 	TEXTURES_FLOOR("garndesh/oculus/textures/floor.png"),
 	TEXTURES_JASPER("garndesh/oculus/textures/aapje.png"),
-	TEXTURES_WALL("garndesh/oculus/textures/wall.png"),
+	TEXTURES_WALL("garndesh/oculus/textures/wall_flat.png"),
 	
 	SHADERS_TEST_SHADER_FRAGMENT("garndesh/oculus/fragment01.frag"),
 	SHADERS_TEST_SHADER_VERTEX("garndesh/oculus/vertex01.vert"),
@@ -17,7 +17,7 @@ public enum Resources implements Resource {
 	MODEL_SKYBOX("src/main/resources/garndesh/oculus/models/skybox.obj"),
 	MODEL_FLOOR("src/main/resources/garndesh/oculus/models/floor.obj"),
 	MODEL_JASPER("src/main/resources/garndesh/oculus/models/aapje.obj"),
-	MODEL_WALL("src/main/resources/garndesh/oculus/models/wall.obj"),
+	MODEL_WALL("src/main/resources/garndesh/oculus/models/wall_flat.obj"),
 	
 	NO_RESOURCE("");
 

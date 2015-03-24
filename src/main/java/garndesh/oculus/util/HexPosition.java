@@ -10,17 +10,17 @@ public class HexPosition {
 	private int r;
 	private float scale = 1;
 	
-	public static final byte[][] NEIGHBORS = new byte[][]{ {0, 1}, {-1, 1}, {-1, 0}, {0, -1}, {1, -1}, {1, 0} };
+	public static final byte[][] NEIGHBORS = new byte[][]{ {1, 0}, {1, -1}, {0, 1}, {1, 0}, {-1, 1}, {0, -1}};
 	
 	public HexPosition(){
 		this(0, 0, 0);
 	}
 	
-	public HexPosition(int q, int r){
+	public HexPosition(int r, int q){
 		this(q, r, 1F);
 	}
 	
-	public HexPosition(int q, int r, float s){
+	public HexPosition(int r, int q, float s){
 		this.q = q;
 		this.r = r;
 		this.scale = s;

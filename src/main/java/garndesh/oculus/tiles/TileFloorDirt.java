@@ -16,7 +16,7 @@ public class TileFloorDirt extends TileWorld{
 	}
 
 	@Override
-	public void renderTile(HexPosition pos) {
+	public void renderTile(int r, int q) {
 		this.floor.renderModel();
 	}
 

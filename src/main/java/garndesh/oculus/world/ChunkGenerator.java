@@ -4,6 +4,7 @@ import java.util.Random;
 
 import garndesh.oculus.tiles.TileWorld;
 import garndesh.oculus.util.HexPosition;
+import garndesh.oculus.util.Log;
 
 public class ChunkGenerator {
 
@@ -11,17 +12,20 @@ public class ChunkGenerator {
 	
 	public static WorldChunk generateChunk(int r, int q){
 		WorldChunk chunk = new WorldChunk(r, q);
-		byte radius = (byte) WorldChunk.CHUNK_SIZE/2-1;
-		for(byte x = (byte)-radius; x <=radius; x++){
-			for(byte y = (byte)-radius; y <= radius; y++){
-				if(Math.abs(y+x)>radius)
+		int radius = WorldChunk.CHUNK_RADIUS;
+		Log.d("generator", "generating chunk: "+r+":"+q+" of radius: "+radius);
+		for(int x = -radius; x <=radius; x++){
+			for(int y = -radius; y <= radius; y++){
+				if(Math.abs(y+x)>radius) {
+					Log.d("Generator", "skipping x= "+x+" y: " +y);
 					continue;
-				HexPosition pos = new HexPosition(x, y);
+				}
+				Log.d("Generator", "creating tile x= "+x+" y: " +y);
+				//chunk.setTile((byte)(x+radius), (byte)(y+radius), (short) TileWorld.tiles.getIndexOf("tileFloorDirt"));
 				if(Math.abs(Math.abs(y)-Math.abs(x))==2 || rand.nextInt(20) == 0){
-					chunk.setTile(x, y, (short) TileWorld.tiles.getIndexOf("tileWallDirt"));
+					chunk.setTile((byte)(x+radius), (byte)(y+radius), (short) TileWorld.tiles.getIndexOf("tileWallDirt"));
 				} else {
-					//map.addToMap(pos, (TileWorld) TileWorld.tiles.getObject("tileFloorDirt"));
-					chunk.setTile(x, y, (short) TileWorld.tiles.getIndexOf("tileFloorDirt"));
+					chunk.setTile((byte)(x+radius), (byte)(y+radius), (short) TileWorld.tiles.getIndexOf("tileFloorDirt"));
 				}
 			}
 		}
